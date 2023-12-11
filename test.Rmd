@@ -1,0 +1,139 @@
+---
+title: "Final Project 10"
+author: "Odera Nwosu"
+date: "2023-12-11"
+output: html_document
+---
+
+```{r}
+library(lubridate)
+```
+
+## Reading In & Formatting Data
+
+```{r}
+#data files
+data <- read.csv(paste("./dataset","aqny.csv", sep=''), header=TRUE)
+```
+
+```{r}
+# data with timestamps
+data$timestamp <- ymd(data$date)
+
+start_date <- as.Date("2019-01-01")
+end_date <-as.Date("2023-12-01")
+data <- data[, c("pm25", "o3", "timestamp")]
+data <- data[data$timestamp > start_date | data$timestamp < end_date, ]
+```
+
+::: {#raw_analysis}
+## Raw Analysis of AQI Levels for Particulate Matter and Ozone
+
+### I. Particulate Matter Data Summary
+
+```{r}
+hist(data$pm25, main = "Histogram of Particulate Matter AQI (pm25) in the last 4 years", xlab = "Air Quality Index (AQI)", col="skyblue")
+```
+
+```{r}
+hist(data$pm25, main = "Histogram of Particulate Matter AQI (pm2) in the last 4 years", xlab = "Air Quality Index (AQI)", col="skyblue")
+abline(v =  100, col = "red", lwd = 2)
+
+cat("Days with particulate matter AQIs unhealthy for senesitive groups (AQI above 100):", length(data[data$pm25 > 100,]))
+```
+
+### II. Ozone AQI Data Summary
+
+```{r}
+hist(data$o3, main = "Histogram of Ozone AQI (o3) in the last 4 years", xlab = "Air Quality Index (AQI)", col="lightgreen")
+abline(v =  100, col = "red", lwd = 2)
+```
+
+```{r}
+cat("Days with Ozone AQIs unhealthy for sensitive groups (AQI above 100):", length(data[data$pm25 > 100,]))
+```
+
+### III. Statistical Summary of Particulate Matter AQI and Ozone AQI
+
+```{r}
+boxplot(data$pm25, data$o3, names = c("Particulate Matter (pm25)", "Ozone (o3)"), ylab="Aiq Quality Index", main = "Box Plot Comparison between pm25 and o3", col = c("skyblue", "lightgreen"))
+
+summary(data$pm25)
+summary(data$o3)
+
+```
+
+### IV. Statistical Summary of Difference Between Ozone & Particulate Matter
+:::
+
+::: {#missing_data}
+## Missing Data
+
+### I. Missing Data for AQI of Ozone (o3)
+
+```{r}
+all_days <- seq(start_date, end_date, by = "day")
+complete_o3_data <- data[!(is.na(data$o3)),]
+missing_o3_days <- setdiff(all_days, complete_o3_data$timestamp)
+
+cat("Total Days of missing values for particulate matter:", length(missing_o3_days), "\n" )
+       
+cat("Percent of missing days value for ozone:", length(missing_o3_days)/(length(all_days)), "\n"  )
+
+summary(as.Date(missing_o3_days))
+```
+
+```{r}
+
+# Create a time plot with markers for missing times
+plot(all_days, rep(1, length(all_days)), type = "n", xlab = "Time", ylab = "", main = "Time Plot with Missing Times")
+
+# Mark missing times
+points(missing_o3_days, rep(1, length(missing_o3_days)), cex = 0.7, pch = 4, col = "darkgreen")
+
+```
+
+### II. Missing Data for AQI of Particulate Matter (pm25)
+
+```{r}
+
+complete_pm25_data <- data[!(is.na(data$pm25)),]
+missing_pm25_days <- setdiff(all_days, complete_pm25_data$timestamp)
+
+cat("Total Days of missing values for particulate matter:", length(missing_pm25_days), "\n" )
+       
+cat("Percent of missing days value for ozone:", length(missing_pm25_days)/(length(all_days)), "\n"  )
+
+summary(as.Date(missing_pm25_days))
+```
+
+```{r}
+# Create a time plot with markers for missing times
+plot(all_days, rep(1, length(all_days)), type = "n", xlab = "Time", ylab = "", main = "Time Plot with Missing Times")
+# Mark missing times
+points(missing_pm25_days, rep(1, length(missing_pm25_days)), cex = 0.7, pch = 4, col = "darkgreen")
+```
+:::
+
+::: {#test}
+## Paired Difference T Procedure
+
+### I. Analysis of AQI Difference between Particulate Matter (pm25) and Ozone (o3)
+
+```{r}
+
+complete_data <- na.omit(data)
+complete_data$differences <- complete_data$pm25 - complete_data$o3
+
+```
+
+```{r}
+boxplot(complete_data$differences, names = c("Difference between AQI scores of Particulate matter and Ozone on a Given Day"), ylab="Aiq Quality Index Difference", main = "Box Plot of Difference between AQI scores of Particulate matter and Ozone on a Given Day", col = c("lightgreen")) 
+
+summary(complete_data$differences)
+```
+:::
+
+::: {#t-test}
+## Two Sample T-test
+:::
