@@ -1,0 +1,71 @@
+---
+title: "final_project"
+author: "Odera Nwosu"
+date: "2023-12-10"
+output: html_document
+---
+
+```{r}
+library(lubridate)
+```
+
+## Reading In & Formatting Data
+
+```{r}
+#data files
+aq_measurements_bronx <- read.csv(paste("./","bronx.csv", sep=''), header=TRUE)
+aq_measurements_manhattan <- read.csv(paste("./","manhattan.csv", sep=''), header=TRUE)
+library(lubridate)
+```
+
+```{r}
+# data with timestamps
+aq_measurements_bronx$timestamp <- ymd_hms(aq_measurements_bronx$dateUtc)
+aq_measurements_manhattan$timestamp <- ymd_hms(aq_measurements_manhattan$dateUtc)
+```
+
+## What Data is Missing
+
+### Finding Missing Days for The Bronx
+
+```{r}
+#finding missing days
+start_date <- floor_date(min(aq_measurements_manhattan$timestamp), unit = "days")
+end_date <- ceiling_date(max(aq_measurements_bronx$timestamp), unit = "days")
+
+# Generate a sequence of dates from start_date to end_date
+all_dates <- seq.Date(from = as.Date(start_date), to = as.Date(end_date), by = "days")
+
+pm25 <- aq_measurements_bronx[aq_measurements_bronx$parameter == "pm25",]
+na.omit(pm25)
+existing_dates <- unique(floor_date(pm25$timestamp, unit = "days"))
+missing_dates <- setdiff(all_dates, existing_dates)
+
+# Print the results
+cat(missing_dates)
+cat("Number of missing days:", length(missing_dates), "\n")
+```
+
+### Finding Missing Days for Manhattan
+
+```{r}
+
+start_date <- floor_date(min(aq_measurements_manhattan$timestamp), unit = "days")
+end_date <- ceiling_date(max(aq_measurements_manhattan$timestamp), unit = "days")
+
+# Generate a sequence of dates from start_date to end_date
+all_dates <- seq.Date(from = as.Date(start_date), to = as.Date(end_date), by = "days")
+
+existing_dates <- unique(floor_date(aq_measurements_manhattan$timestamp, unit = "days"))
+missing_dates2 <- setdiff(all_dates, existing_dates)
+
+# Print the results
+cat(missing_dates2)
+cat("Number of missing days:", length(missing_dates), "\n")
+
+min()
+```
+
+```{r}
+
+```
