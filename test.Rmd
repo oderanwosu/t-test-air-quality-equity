@@ -97,7 +97,7 @@ graph_dist_difference <- hist(complete_data$differences, main = "Distribution of
 
 ```
 
-### II. Anaylsis of Missing Data from AQI Difference between Particulate Matter (pm25) and Ozone (o3)
+### II. Analysis of Missing Data from AQI Difference between Particulate Matter (pm25) and Ozone (o3)
 
 ```{r}
 all_days <- seq(start_date, end_date, by = "day")
@@ -143,6 +143,10 @@ alpha_level <- .05
 cat("The assumption that we have over 30 points", (n > 30) )
 ```
 
+```{r}
+
+```
+
 ### IV. Calculations
 
 ```{r}
@@ -157,7 +161,7 @@ cat("standard error:", se, "\n")
 
 t_score <- (x - null_hypothesis_val)/se
 cat("t-score:", t_score, "\n")
-critical_val <- qt( 1 - alpha_level / 2, df)
+critical_val <- qt( (1 - alpha_level) / 2, df)
 me <- critical_val * se
 cat("margin of error:", me, "\n")
 ```
@@ -166,15 +170,18 @@ cat("margin of error:", me, "\n")
 
 p_stat <- pt(t_score, df=df)
 cat("p-stat:", p_stat, "\n")
-
 p_value <- 1 - p_stat
+cat("p-value:", p_value)
 
-cat("p_value:", p_value)
 ```
 
 ```{r}
 lowerbound <- x - me
 upperbound <- x + me
 paste("bounds: [", lowerbound, ",", upperbound, "]")
+```
+
+```{r}
+
 ```
 :::
