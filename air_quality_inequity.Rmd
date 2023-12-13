@@ -22,7 +22,7 @@ bronx_aq <- jsonlite::fromJSON( content(response, "text") )$results
 
 response <- VERB("GET", 'https://api.openaq.org/v2/measurements?location_id=228663&parameter=pm25&date_from=2020-12-11T19:00:00-05:00&date_to=2023-12-13T13:53:27-05:00&limit=30000', accept("application/json"))
 
-manhattan_aq <- jsonlite::fromJSON( content(response, "text") )$results
+williamsburg_aq <- jsonlite::fromJSON( content(response, "text") )$results
 ```
 
 ```{r}
@@ -35,12 +35,12 @@ modify_dates <- function(data) {
   return(data)
 }
 bronx_aq <- modify_dates(bronx_aq)
-manhattan_aq <- modify_dates(manhattan_aq)
+williamsburg_aq <- modify_dates(williamsburg_aq)
 start_date <- as.POSIXct("2023-01-01 03:00:00")
-end_date <- min(c(max(bronx_aq$timestamp), max(manhattan_aq$timestamp)))
+end_date <- min(c(max(bronx_aq$timestamp), max(williamsburg_aq$timestamp)))
 
 bronx_aq <- bronx_aq[bronx_aq$timestamp > start_date & bronx_aq$timestamp < end_date, ]
-manhattan_aq <- manhattan_aq[manhattan_aq$timestamp > start_date & manhattan_aq$timestamp < end_date, ]
+williamsburg_aq <- williamsburg_aq[williamsburg_aq$timestamp > start_date & williamsburg_aq$timestamp < end_date, ]
 
 timeline_string <- paste("from", start_date, "to", end_date)
 ```
@@ -61,17 +61,17 @@ boxplot(data$pm25, names = c("Particulate Matter (pm25)"), ylab="Aiq Quality Ind
 
 ```
 
-### II. Distribution of Particulate Matter Data in Lower Manhattan, NY
+### II. Distribution of Particulate Matter Data in Williamsburg, NY
 
 ```{r}
-hist(manhattan_aq$value, main = paste("Particulate Matter (pm25 µg/m³) Measurements in Bronx NY", timeline_string), cex.main=.8, xlab = "Air Quality Index (AQI)", col="salmon1", breaks = 100)
+hist(williamsburg_aq$value, main = paste("Particulate Matter (pm25 µg/m³) Measurements in Bronx NY", timeline_string), cex.main=.8, xlab = "Air Quality Index (AQI)", col="salmon1", breaks = 100)
 
 ```
 
 ### III. Box plot Comparison of Data
 
 ```{r}
-boxplot(bronx_aq$value, manhattan_aq$value, names = c("The Bronx, NYC", "Lower Manhattan, NYC"), ylab="Aiq Quality Index", main = "Box Plot Comparison between pm25 and o3", col = c("skyblue", "salmon1"))
+boxplot(bronx_aq$value, williamsburg_aq$value, names = c("The Bronx, NYC", "Lower Williamsburg, NYC"), ylab="Aiq Quality Index", main = "Box Plot Comparison between pm25 and o3", col = c("skyblue", "salmon1"))
 ```
 
 ## Paired T-Difference Procedure
@@ -79,8 +79,8 @@ boxplot(bronx_aq$value, manhattan_aq$value, names = c("The Bronx, NYC", "Lower M
 ### Formatting Data
 
 ```{r}
-merged_aq_data <- merge(bronx_aq, manhattan_aq, by = "timestamp", all = FALSE)
-## If the difference is negative, then Lower Manhattan had a larger pm25 measure.
+merged_aq_data <- merge(bronx_aq, williamsburg_aq, by = "timestamp", all = FALSE)
+## If the difference is negative, then Lower williamsburg had a larger pm25 measure.
 merged_aq_data$difference <- merged_aq_data$value.x - merged_aq_data$value.y
 ```
 :::
@@ -112,7 +112,7 @@ points(missing_differences_days, rep(1, length(missing_differences_days)), cex =
 #### Normal Distribution
 
 ```{r}
-hist(merged_aq_data$difference, main = paste("Difference between pm25 measures from The Bronx and Manhattan", timeline_string), cex.main=.7, xlab = "Air Quality Index (AQI)", col="skyblue", breaks = 100)
+hist(merged_aq_data$difference, main = paste("Difference between pm25 measures from The Bronx and williamsburg", timeline_string), cex.main=.7, xlab = "Air Quality Index (AQI)", col="skyblue", breaks = 100)
 ```
 
 ```{r}
