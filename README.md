@@ -88,4 +88,4 @@ In addition there are a lot of data points that fall way outside the bounds. You
 
 ## Concluding Remarks
 
-While the data may have been contrary to what we believe, the implications of this do not necessarily place these communities in the same criteria of climate harm as communities such as The Bronx /Hunterspoint. Thomas Frank's article highlights this fact by understanding that it may be time to change how we classify "disadvantaged communities".
+While the data may have been contrary to what we believe, the implications of this do not necessarily place these communities in the same criteria of climate harm as communities such as The Bronx Hunterspoint. Thomas Frank's article highlights this fact by understanding that it may be time to change how we classify "disadvantaged communities".
