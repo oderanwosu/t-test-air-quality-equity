@@ -10,7 +10,7 @@ All the data used for testing was captured between the dates of January 1st, 202
 
 ## Affluent Community Labeled "Disadvantaged" by Air Pollution Measurements
 
-New York's Climate Justice Working Group claims that air pollution levels in Williamsburg, an affluent New York City neighborhood, classify the area as a [\"disadvantaged community\"](https://arc.net/l/quote/tdfsjypx). However, because of the Canadian wildfires causing discrepancies within data and dicomity between wealth and the term 'disadvantaged', we are highly skeptical that air pollution levels exceed that of actual disadvantaged communities like in Hunterspoint, NY, where 50% of the population falls under the poverty line.
+New York's Climate Justice Working Group claims that air pollution levels in Williamsburg, an affluent New York City neighborhood, classify the area as a ["disadvantaged community"](https://arc.net/l/quote/tdfsjypx). However, because of the Canadian wildfires causing discrepancies within data and dicomity between wealth and the term 'disadvantaged', we are highly skeptical that air pollution levels exceed that of actual disadvantaged communities like in Hunterspoint, NY, where 50% of the population falls under the poverty line.
 
 Therefore, we are going to try and test New York's Climate Justice Working Group alternative hypothesis and prove with an alpha level of .05, the claim Williamsburg, NY has a higher concentration of particulate matter (PM25), a known pollutant, than the Bronx.
 
@@ -18,11 +18,11 @@ Therefore, we are going to try and test New York's Climate Justice Working Group
 
 The population is hourly pm(2.5) concentration (µg/m³) in New York during 2023 for both stations.
 
-We can\'t just use our data because it would not represent the entire day of 2023. We are missing hours and therefore don\'t have the exact answer. Hypothesis test gives us the best results we can get.
+We can't just use our data because it would not represent the entire day of 2023. We are missing hours and therefore don't have the exact answer. Hypothesis test gives us the best results we can get.
 
 We are doing a t-paired test because Bronx air quality affects both Williamsburg and Bronx and vice versa. This means they are locationally dependent on each other. Another reason is that outside sources such as wildfire as you will see in our data can cover both the city and such bad air quality that in a couple cases broke the stations quality gauge.
 
-![](images/000012.png)
+![](images/missing_hours.png)
 
 Therefore,
 
@@ -50,7 +50,7 @@ We are doing a t-paired test because Bronx air quality affects both Williamsburg
 
 **Normal Distribution** ✅
 
-![](00001c)
+![](images/differences.png)
 
 Data shape is approximately normal. In addition our data has over 40 points.
 
@@ -62,7 +62,7 @@ Each data point is recorded on separate hours independent of each other. While, 
 
 Most of our data is missing during the time period of September and February. During this tim period there were multiple wildfires. This makes the sample not random and instead depending on the reason they were missing. Unfortunately it is hard to tell the exact reason as the wildfires quality air got so bad that sensors stopped working as well. This means it is hard to tell what was raining and what was because of those fires.
 
-![](images/000012.png)
+![](images/missing_hours.png)
 
 ## Calculations
 
@@ -84,7 +84,7 @@ As we mentioned before, some of the data is missing from specific time periods. 
 
 In addition there are a lot of data points that fall way outside the bounds. You can see that in the box plot. This is because of the wild fires.
 
-![](000012.png)
+![](images/boxplot_comp.png)
 
 ## Concluding Remarks
 
