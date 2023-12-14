@@ -26,9 +26,6 @@ williamsburg_aq <- jsonlite::fromJSON( content(response, "text") )$results
 ```
 
 ```{r}
-```
-
-```{r}
 # data with timestamps
 modify_dates <- function(data) {
   data$timestamp <- ymd_hms(data$date$utc, tz = "UTC")
@@ -65,7 +62,7 @@ hist(williamsburg_aq$value, main = paste("Hourly PM25 Concentration (µg/m³) in
 ### III. Box plot Comparison of Data
 
 ```{r}
-boxplot(bronx_aq$value, williamsburg_aq$value, names = c("The Bronx, NYC", "Lower Williamsburg, NYC"), ylab="Aiq Quality Index", main = "Box Plot Comparison between pm25 and o3", col = c("skyblue", "salmon1"))
+boxplot(bronx_aq$value, williamsburg_aq$value, names = c("The Bronx, NYC", "Lower Williamsburg, NYC"), ylab="Concentration (µg/m³)", main = "Box Plot Comparison of PM25 Concentration in New York", col = c("skyblue", "salmon1"))
 ```
 
 ## Paired T-Difference Procedure
@@ -86,7 +83,7 @@ merged_aq_data$difference <- merged_aq_data$value.x - merged_aq_data$value.y
 
 ```{r}
 null_hypothesis_difference <- 0
-alpha_level <- 0.5
+alpha_level <- 0.01
 ```
 
 ### Checking Assumptions
@@ -106,7 +103,7 @@ points(missing_differences_days, rep(1, length(missing_differences_days)), cex =
 #### Normal Distribution
 
 ```{r}
-hist(merged_aq_data$difference, main = paste("Difference of PM 25 Concentration between The Bronx and Williamsburg, NY", timeline_string), cex.main=.6, xlab = "Air Quality Index (AQI)", col="skyblue", breaks = 100)
+hist(merged_aq_data$difference, main = paste("Difference of PM 25 Concentration between The Bronx and Williamsburg, NY", timeline_string), cex.main=.6, xlab = "PM25 Concentration (µg/m³)", col="purple", breaks = 100)
 ```
 
 ```{r}
@@ -122,7 +119,6 @@ x <- mean(merged_aq_data$difference)
 n <- length(merged_aq_data$difference)
 df <- n - 1
 s <- sd(merged_aq_data$difference)
-
 ```
 
 ```{r}
@@ -138,6 +134,8 @@ cat("p-stat:", p_stat, "\n")
 p_value <- p_stat
 cat("p-value:", p_value, "\n")
 ```
+
+![](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAaCAYAAADFTB7LAAAAcElEQVR4Xu3OwQmAQAxE0bClWYCW5N06tM6V2YPg5CjoF/JhLoHAi6iqn9eOefUbqrYvHY0cQDLyAlKRNyARmYA0ZMLRkAlGQyaU72tkAtlim7r/vJqDUDjlKBROOQyFU2icQuMUGqfQuBEaV1XPOwEx96nYACK8+wAAAABJRU5ErkJggg== "Run Current Chunk")
 
 ```{r}
 cat("Do we fail to reject the null hypothesis?", p_value < 0.05)
